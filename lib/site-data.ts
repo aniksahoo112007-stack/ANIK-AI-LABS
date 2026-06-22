@@ -209,7 +209,7 @@ export const siteData: SiteContent = {
   "media": {
     "productPhotos": [],
     "promoVideos": [],
-    "brandBookPdf": "",
+    "brandBookPdf": "https://drive.google.com/file/d/1Mqmlyjqtmne2SdEMzoCo6EBNQk9DXUiy/view?usp=sharing",
     "resumePdf": ""
   },
   "assistant": {
