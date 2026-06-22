@@ -68,7 +68,7 @@ function normalize(raw: Record<string, unknown>, idx: number): CmoContentItem {
 
 /** Fetch the live content from GET /api/ai-cmo (cache-busted, no-store). */
 export async function fetchCmoFromApi(): Promise<CmoContentItem[]> {
-  const url = `${AI_CMO_ENDPOINT}?t=${Date.now()}`;
+  const url = `${AI_CMO_ENDPOINT}?limit=100&t=${Date.now()}`;
   if (process.env.NODE_ENV !== "production") {
     console.log("[AI CMO] Fetching API:", url);
   }

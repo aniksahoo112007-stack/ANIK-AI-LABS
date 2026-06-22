@@ -523,7 +523,7 @@ export default function CmoDashboard() {
             <div className="glass flex flex-col items-center gap-2 rounded-2xl p-10 text-center text-slate-500">
               <WifiOff size={24} />
               <span className="text-sm">
-                No content yet — waiting for n8n to POST to /api/ai-cmo.
+                No AI CMO content generated yet.
               </span>
             </div>
           </div>
@@ -636,7 +636,7 @@ export default function CmoDashboard() {
             ) : (
               <div className="glass flex flex-col items-center gap-2 rounded-2xl p-10 text-center text-slate-500">
                 <WifiOff size={24} />
-                <span className="text-sm">No content available right now.</span>
+                <span className="text-sm">No AI CMO content generated yet.</span>
               </div>
             )}
           </div>

@@ -222,6 +222,32 @@ export default function AdminPage() {
     showFlash("Cleared saved content");
   }
 
+  // Calls the protected clear endpoint to wipe AI CMO content from Redis.
+  async function clearCmoRedis() {
+    if (
+      !confirm(
+        "Clear ALL AI CMO content from Redis? This cannot be undone."
+      )
+    )
+      return;
+    try {
+      const res = await fetch("/api/ai-cmo/clear", {
+        method: "POST",
+        headers: content.cmo.webhookSecret
+          ? { "x-ai-cmo-secret": content.cmo.webhookSecret }
+          : {},
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.status === "success") {
+        showFlash("AI CMO Redis content cleared");
+      } else {
+        showFlash(data.message || "Clear failed");
+      }
+    } catch {
+      showFlash("Clear failed — network error");
+    }
+  }
+
   function logout() {
     setLoggedIn(false);
     setAuthed(false);
@@ -1285,6 +1311,33 @@ export default function AdminPage() {
                   . Demo items in lib/site-data.ts are only used if API Enabled is
                   off.
                 </p>
+              </Card>
+
+              <Card className="space-y-3">
+                <div>
+                  <h3 className="text-sm font-semibold text-white">
+                    Danger Zone
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-400">
+                    Permanently delete all AI CMO content from Redis (key{" "}
+                    <code className="rounded bg-black/30 px-1">
+                      ai-cmo-content
+                    </code>
+                    ). The dashboard shows an empty state until n8n posts again.
+                    Sends the Webhook Secret as{" "}
+                    <code className="rounded bg-black/30 px-1">
+                      x-ai-cmo-secret
+                    </code>
+                    .
+                  </p>
+                </div>
+                <button
+                  onClick={clearCmoRedis}
+                  className="btn-ghost !py-2.5 !text-red-300 hover:!border-red-400/40"
+                >
+                  <Trash2 size={15} />
+                  Clear AI CMO Redis Content
+                </button>
               </Card>
             </SectionShell>
           )}
