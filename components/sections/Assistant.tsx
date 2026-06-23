@@ -5,7 +5,7 @@ import { Bot, Send } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, stagger } from "@/components/motion";
 import { useSiteContent } from "@/lib/useSiteContent";
-import { isTelegramActive } from "@/lib/telegram";
+import { isTelegramActive, openTelegram } from "@/lib/telegram";
 
 export default function Assistant() {
   const { assistant } = useSiteContent();
@@ -85,15 +85,14 @@ export default function Assistant() {
             </p>
 
             {botReady ? (
-              <a
-                href={assistant.telegramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => openTelegram(assistant)}
                 className="btn-primary"
               >
                 <Send size={16} />
                 {assistant.ctaText || "Chat with AI Assistant"}
-              </a>
+              </button>
             ) : (
               <button
                 type="button"

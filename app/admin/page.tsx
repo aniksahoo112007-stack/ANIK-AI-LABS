@@ -41,6 +41,7 @@ import {
   cloneDefault,
 } from "@/lib/content";
 import type { SiteContent } from "@/lib/types";
+import { openTelegram } from "@/lib/telegram";
 import { ICON_NAMES } from "@/components/DynamicIcon";
 import {
   Field,
@@ -1055,6 +1056,14 @@ export default function AdminPage() {
                     </select>
                   </label>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => openTelegram(content.assistant)}
+                  className="btn-ghost !py-2 text-xs"
+                >
+                  <ExternalLink size={14} />
+                  Preview / Open Telegram
+                </button>
                 <Field
                   label="Primary CTA Text"
                   value={content.assistant.ctaText}

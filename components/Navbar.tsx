@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sparkles, Bot, Check } from "lucide-react";
 import { navLinks } from "@/lib/data";
 import { useSiteContent } from "@/lib/useSiteContent";
-import { isTelegramActive } from "@/lib/telegram";
+import { isTelegramActive, openTelegram } from "@/lib/telegram";
 
 export default function Navbar() {
   const { hero, assistant } = useSiteContent();
@@ -29,7 +29,7 @@ export default function Navbar() {
   function openAssistant(closeMenu = false) {
     if (closeMenu) setOpen(false);
     if (tgActive) {
-      window.open(assistant.telegramUrl, "_blank", "noopener,noreferrer");
+      openTelegram(assistant);
     } else {
       setToast("AI Assistant — Coming Soon");
       window.setTimeout(() => setToast(""), 2200);
