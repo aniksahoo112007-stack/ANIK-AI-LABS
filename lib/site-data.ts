@@ -200,11 +200,11 @@ export const siteData: SiteContent = {
     }
   ],
   "contact": {
-    "email": "your-email@example.com",
-    "whatsapp": "+91 00000 00000",
-    "github": "https://github.com/your-username",
-    "linkedin": "https://linkedin.com/in/your-username",
-    "instagram": "https://instagram.com/your-username"
+    "email": "teststf404@gmail.com",
+    "whatsapp": "ASK CHATBOT FOR WP NUMBER",
+    "github": "CANNOT SHAREABLE DUR TO SECURITY ISSUE",
+    "linkedin": "CANNOT SHAREABLE DUR TO SECURITY ISSUE",
+    "instagram": "CANNOT SHAREABLE DUR TO SECURITY ISSUE"
   },
   "media": {
     "productPhotos": [],
