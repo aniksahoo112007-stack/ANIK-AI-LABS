@@ -215,7 +215,7 @@ export const siteData: SiteContent = {
   "assistant": {
     "title": "AI Assistant for Project Queries",
     "description": "Chat with the ANIK AI LABS assistant to explore projects, ask about services, discuss requirements, and connect with the developer.",
-    "telegramUrl": "https://web.telegram.org/k/#@anik_ai_labs_bot",
+    "telegramUrl": "https://t.me/anik_ai_labs_bot",
     "status": "active",
     "ctaText": "Talk to ANIK AI Assistant",
     "flowSteps": [
@@ -289,27 +289,27 @@ export const siteData: SiteContent = {
       }
     ]
   },
-  reviews: [
+  "reviews": [
     {
-      id: "rev-1",
-      clientName: "Rajesh Patel",
-      projectName: "Nandarani POS",
-      rating: 5,
-      text: "Billing is finally fast and our stock numbers are always accurate. The GST and QR payment support saved us hours every day. Highly recommended.",
+      "id": "rev-1",
+      "clientName": "Rajesh Patel",
+      "projectName": "Nandarani POS",
+      "rating": 5,
+      "text": "Billing is finally fast and our stock numbers are always accurate. The GST and QR payment support saved us hours every day. Highly recommended."
     },
     {
-      id: "rev-2",
-      clientName: "Priya Sharma",
-      projectName: "AI Data Detective",
-      rating: 5,
-      text: "Turned a messy pile of spreadsheets into a clean dashboard with a clear executive summary. The insights were genuinely useful for decisions.",
+      "id": "rev-2",
+      "clientName": "Priya Sharma",
+      "projectName": "AI Data Detective",
+      "rating": 5,
+      "text": "Turned a messy pile of spreadsheets into a clean dashboard with a clear executive summary. The insights were genuinely useful for decisions."
     },
     {
-      id: "rev-3",
-      clientName: "Arjun Mehta",
-      projectName: "FileMind",
-      rating: 4,
-      text: "A genuinely smart desktop assistant. Voice commands and instant file search changed how I work. Excited for the upcoming features.",
-    },
-  ],
+      "id": "rev-3",
+      "clientName": "Arjun Mehta",
+      "projectName": "FileMind",
+      "rating": 4,
+      "text": "A genuinely smart desktop assistant. Voice commands and instant file search changed how I work. Excited for the upcoming features."
+    }
+  ]
 };
