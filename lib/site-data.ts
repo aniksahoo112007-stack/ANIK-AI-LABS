@@ -215,9 +215,9 @@ export const siteData: SiteContent = {
   "assistant": {
     "title": "AI Assistant for Project Queries",
     "description": "Chat with the ANIK AI LABS assistant to explore projects, ask about services, discuss requirements, and connect with the developer.",
-    "telegramUrl": "",
-    "status": "coming-soon",
-    "ctaText": "Chat with AI Assistant",
+    "telegramUrl": "https://web.telegram.org/k/#@anik_ai_labs_bot",
+    "status": "active",
+    "ctaText": "Talk to ANIK AI Assistant",
     "flowSteps": [
       "Open AI Assistant",
       "Choose Project / Service / Hire Developer",
