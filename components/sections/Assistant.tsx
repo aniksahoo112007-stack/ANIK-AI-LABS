@@ -5,11 +5,16 @@ import { Bot, Send } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, stagger } from "@/components/motion";
 import { useSiteContent } from "@/lib/useSiteContent";
-import { isTelegramActive, openTelegram } from "@/lib/telegram";
+import {
+  isTelegramActive,
+  openTelegram,
+  resolveTelegramUsername,
+} from "@/lib/telegram";
 
 export default function Assistant() {
   const { assistant } = useSiteContent();
   const botReady = isTelegramActive(assistant);
+  const tgUser = resolveTelegramUsername(assistant);
 
   return (
     <section id="assistant" className="relative">
@@ -91,7 +96,10 @@ export default function Assistant() {
                 className="btn-primary"
               >
                 <Send size={16} />
-                {assistant.ctaText || "Chat with AI Assistant"}
+                {assistant.ctaText &&
+                assistant.ctaText !== "Chat with AI Assistant"
+                  ? assistant.ctaText
+                  : "Open in Telegram"}
               </button>
             ) : (
               <button
@@ -103,6 +111,25 @@ export default function Assistant() {
                 <Send size={16} />
                 Telegram assistant coming soon
               </button>
+            )}
+
+            {botReady && (
+              <p className="max-w-xs text-[11px] leading-relaxed text-slate-500">
+                If the Telegram app does not open, tap{" "}
+                <span className="text-slate-400">Open in Telegram</span> again or
+                copy the bot username:{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard
+                      ?.writeText(`@${tgUser}`)
+                      .catch(() => {});
+                  }}
+                  className="font-semibold text-teal-glow hover:underline"
+                >
+                  @{tgUser}
+                </button>
+              </p>
             )}
           </motion.div>
         </div>

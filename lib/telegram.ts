@@ -4,12 +4,11 @@ import type { AssistantContent } from "./types";
 // TELEGRAM BOT — status + deep-link helpers (single source of truth)
 // ===========================================================================
 // Bot is ACTIVE only when a URL is set AND status === "active".
-// Used by: navbar AI Assistant button, AI Assistant section, AI CMO dashboard
-// status card, and the admin preview button — so they always agree.
+// Mobile uses the tg:// deep link FIRST (opens the Telegram app), with a
+// t.me web fallback. Desktop opens t.me in a new tab.
 // ===========================================================================
 
-// Fallback bot username when none can be extracted from the admin URL.
-const DEFAULT_TELEGRAM_USERNAME = "anik_ai_labs_assist";
+export const TELEGRAM_BOT_USERNAME = "anik_ai_labs_assist";
 
 export function isTelegramActive(assistant: AssistantContent): boolean {
   return (
@@ -37,51 +36,52 @@ export function extractTelegramUsername(url: string): string {
   return "";
 }
 
-function isMobile(): boolean {
-  if (typeof navigator === "undefined") return false;
-  return /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+/** Resolve the username to use: from the admin URL, else the default bot. */
+export function resolveTelegramUsername(assistant: AssistantContent): string {
+  return extractTelegramUsername(assistant.telegramUrl) || TELEGRAM_BOT_USERNAME;
 }
 
 /**
- * Open the Telegram bot the right way:
- *  - Mobile: try the app via tg://resolve?domain=<user>; if it doesn't open
- *    within 1200ms, fall back to https://t.me/<user>.
- *  - Desktop: open https://t.me/<user>.
- *  - If a username can't be extracted but an admin URL exists, open it directly.
+ * Core opener. On Android/iOS it sets window.location to the tg:// deep link
+ * IMMEDIATELY (inside the click handler — no async wrapper first), then falls
+ * back to the t.me web link after 1500ms if the app didn't take over.
+ * On desktop it opens the t.me link in a new tab.
  */
-export function openTelegram(assistant: AssistantContent): void {
-  if (typeof window === "undefined") return;
-
-  const adminUrl = assistant.telegramUrl.trim();
-  const username = extractTelegramUsername(adminUrl) ||
-    (adminUrl ? "" : DEFAULT_TELEGRAM_USERNAME);
-
-  // Admin URL present but no extractable username → just open it as-is.
-  if (!username) {
-    window.open(adminUrl, "_blank", "noopener,noreferrer");
-    return;
-  }
+export function openTelegramBot(username: string): void {
+  if (typeof window === "undefined" || !username) return;
 
   const webUrl = `https://t.me/${username}`;
   const appUrl = `tg://resolve?domain=${username}`;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  if (!isMobile()) {
+  if (isMobile) {
+    // Try the app first (this is what opens Telegram on the phone).
+    window.location.href = appUrl;
+    // Fallback to the web link if the app did not open.
+    setTimeout(() => {
+      window.location.href = webUrl;
+    }, 1500);
+  } else {
     window.open(webUrl, "_blank", "noopener,noreferrer");
+  }
+}
+
+/**
+ * Convenience wrapper used across the site. Prefers the username from the
+ * admin Telegram URL; if the admin entered a non-Telegram URL it opens that
+ * directly; otherwise it uses the default bot username.
+ */
+export function openTelegram(assistant: AssistantContent): void {
+  if (typeof window === "undefined") return;
+  const username = extractTelegramUsername(assistant.telegramUrl);
+  if (username) {
+    openTelegramBot(username);
     return;
   }
-
-  // Mobile: attempt the app, fall back to the web link if it doesn't take over.
-  let switched = false;
-  const onHide = () => {
-    switched = true;
-  };
-  document.addEventListener("visibilitychange", onHide);
-  window.setTimeout(() => {
-    document.removeEventListener("visibilitychange", onHide);
-    if (!switched && !document.hidden) {
-      window.location.href = webUrl;
-    }
-  }, 1200);
-
-  window.location.href = appUrl;
+  const adminUrl = assistant.telegramUrl.trim();
+  if (adminUrl) {
+    window.open(adminUrl, "_blank", "noopener,noreferrer");
+    return;
+  }
+  openTelegramBot(TELEGRAM_BOT_USERNAME);
 }
