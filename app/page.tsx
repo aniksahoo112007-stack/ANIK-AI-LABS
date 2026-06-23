@@ -11,6 +11,7 @@ import Gallery from "@/components/sections/Gallery";
 import VideoShowcase from "@/components/sections/VideoShowcase";
 import CmoDashboard from "@/components/sections/CmoDashboard";
 import AskDeveloper from "@/components/sections/AskDeveloper";
+import Reviews from "@/components/sections/Reviews";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
         <CmoDashboard />
         <Assistant />
         <AskDeveloper />
+        <Reviews />
         <Contact />
       </main>
       <Footer />

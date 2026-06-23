@@ -113,6 +113,14 @@ export type CmoDashboardContent = {
   items: CmoContentItem[];
 };
 
+export type ReviewItem = {
+  id: string;
+  clientName: string;
+  projectName: string;
+  rating: number; // 1-5
+  text: string;
+};
+
 export type SiteContent = {
   hero: HeroContent;
   about: AboutContent;
@@ -124,4 +132,5 @@ export type SiteContent = {
   assistant: AssistantContent;
   videoShowcase: VideoShowcaseContent;
   cmo: CmoDashboardContent;
+  reviews: ReviewItem[];
 };

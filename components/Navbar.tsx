@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, Bot, Check } from "lucide-react";
 import { navLinks } from "@/lib/data";
 import { useSiteContent } from "@/lib/useSiteContent";
+import { isTelegramActive } from "@/lib/telegram";
 
 export default function Navbar() {
-  const { hero } = useSiteContent();
+  const { hero, assistant } = useSiteContent();
   const brandParts = hero.brand.trim().split(" ");
   const brandFirst = brandParts[0];
   const brandRest = brandParts.slice(1).join(" ");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState("");
+
+  const tgActive = isTelegramActive(assistant);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -20,6 +24,17 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Opens the Telegram bot if active, otherwise shows a "Coming Soon" toast.
+  function openAssistant(closeMenu = false) {
+    if (closeMenu) setOpen(false);
+    if (tgActive) {
+      window.open(assistant.telegramUrl, "_blank", "noopener,noreferrer");
+    } else {
+      setToast("AI Assistant — Coming Soon");
+      window.setTimeout(() => setToast(""), 2200);
+    }
+  }
 
   return (
     <motion.header
@@ -52,9 +67,20 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href="#ask" className="btn-primary !px-5 !py-2">
+          <a href="#ask" className="btn-ghost !px-5 !py-2">
             Ask Developer
           </a>
+          <button
+            onClick={() => openAssistant(false)}
+            className="btn-primary group !px-5 !py-2"
+            aria-label="Open AI Assistant on Telegram"
+          >
+            <Bot
+              size={16}
+              className="transition-transform group-hover:scale-110"
+            />
+            AI Assistant
+          </button>
         </div>
 
         <button
@@ -88,11 +114,33 @@ export default function Navbar() {
               <a
                 href="#ask"
                 onClick={() => setOpen(false)}
-                className="btn-primary mt-2"
+                className="btn-ghost mt-2"
               >
                 Ask Developer
               </a>
+              <button
+                onClick={() => openAssistant(true)}
+                className="btn-primary mt-2"
+              >
+                <Bot size={16} />
+                AI Assistant
+              </button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* coming soon toast */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-6 left-1/2 z-[60] flex -translate-x-1/2 items-center gap-2 rounded-full border border-amber-400/40 bg-midnight-100/95 px-5 py-2.5 text-sm font-medium text-amber-300 shadow-glow backdrop-blur-xl"
+          >
+            <Check size={16} />
+            {toast}
           </motion.div>
         )}
       </AnimatePresence>

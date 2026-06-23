@@ -28,6 +28,7 @@ import {
   Bot,
   Video,
   Gauge,
+  Star,
 } from "lucide-react";
 import {
   ADMIN_USERNAME,
@@ -62,6 +63,7 @@ type TabId =
   | "video"
   | "cmo"
   | "assistant"
+  | "reviews"
   | "data";
 
 const TABS: { id: TabId; label: string; icon: typeof User }[] = [
@@ -75,6 +77,7 @@ const TABS: { id: TabId; label: string; icon: typeof User }[] = [
   { id: "video", label: "Video Showcase", icon: Video },
   { id: "cmo", label: "AI CMO Dashboard", icon: Gauge },
   { id: "assistant", label: "AI Assistant", icon: Bot },
+  { id: "reviews", label: "Reviews", icon: Star },
   { id: "data", label: "Data & Backup", icon: Database },
 ];
 
@@ -286,6 +289,7 @@ export default function AdminPage() {
       assistant: { ...base.assistant, ...(saved.assistant ?? {}) },
       videoShowcase: { ...base.videoShowcase, ...(saved.videoShowcase ?? {}) },
       cmo: { ...base.cmo, ...(saved.cmo ?? {}) },
+      reviews: Array.isArray(saved.reviews) ? saved.reviews : base.reviews,
     };
   }
 
@@ -1339,6 +1343,100 @@ export default function AdminPage() {
                   Clear AI CMO Redis Content
                 </button>
               </Card>
+            </SectionShell>
+          )}
+
+          {tab === "reviews" && (
+            <SectionShell
+              title="Reviews"
+              description="Client testimonials shown on the public website."
+              onSave={() => persist()}
+            >
+              {content.reviews.map((r, i) => {
+                const update = (patch: Partial<typeof r>) => {
+                  const next = [...content.reviews];
+                  next[i] = { ...r, ...patch };
+                  set("reviews", next);
+                };
+                return (
+                  <Card key={r.id} className="space-y-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="chip border-teal-glow/30 text-teal-glow">
+                        Review {i + 1}
+                      </span>
+                      <button
+                        onClick={() =>
+                          set(
+                            "reviews",
+                            content.reviews.filter((_, idx) => idx !== i)
+                          )
+                        }
+                        className="btn-ghost !py-2 text-xs !text-red-300 hover:!border-red-400/40"
+                      >
+                        <Trash2 size={14} />
+                        Delete
+                      </button>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field
+                        label="Client Name"
+                        value={r.clientName}
+                        onChange={(v) => update({ clientName: v })}
+                      />
+                      <Field
+                        label="Project Name"
+                        value={r.projectName}
+                        onChange={(v) => update({ projectName: v })}
+                      />
+                    </div>
+                    <label className="block sm:max-w-[160px]">
+                      <span className="mb-1.5 block text-xs font-medium text-slate-400">
+                        Rating
+                      </span>
+                      <select
+                        value={r.rating}
+                        onChange={(e) =>
+                          update({ rating: Number(e.target.value) })
+                        }
+                        className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none transition focus:border-teal-glow/60 focus:bg-white/[0.05] focus:ring-1 focus:ring-teal-glow/40"
+                      >
+                        {[5, 4, 3, 2, 1].map((n) => (
+                          <option key={n} value={n} className="bg-midnight-100">
+                            {n} star{n === 1 ? "" : "s"}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <TextArea
+                      label="Review Text"
+                      rows={3}
+                      value={r.text}
+                      onChange={(v) => update({ text: v })}
+                    />
+                  </Card>
+                );
+              })}
+              {content.reviews.length === 0 && (
+                <p className="text-xs text-slate-600">No reviews yet.</p>
+              )}
+              <button
+                onClick={() =>
+                  set("reviews", [
+                    ...content.reviews,
+                    {
+                      id: `rev-${Date.now()}`,
+                      clientName: "New client",
+                      projectName: "",
+                      rating: 5,
+                      text: "",
+                    },
+                  ])
+                }
+                className="btn-ghost w-full"
+              >
+                <Plus size={16} />
+                Add review
+              </button>
             </SectionShell>
           )}
 

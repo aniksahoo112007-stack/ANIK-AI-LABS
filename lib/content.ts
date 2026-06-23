@@ -29,6 +29,7 @@ function mergeContent(saved: Partial<SiteContent>): SiteContent {
     assistant: { ...base.assistant, ...(saved.assistant ?? {}) },
     videoShowcase: { ...base.videoShowcase, ...(saved.videoShowcase ?? {}) },
     cmo: { ...base.cmo, ...(saved.cmo ?? {}) },
+    reviews: Array.isArray(saved.reviews) ? saved.reviews : base.reviews,
   };
 }
 

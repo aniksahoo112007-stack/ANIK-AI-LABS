@@ -29,6 +29,7 @@ import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, stagger, Reveal } from "@/components/motion";
 import { useSiteContent } from "@/lib/useSiteContent";
 import { getCmoStats, loadCmoData, AI_CMO_ENDPOINT } from "@/lib/cmo";
+import { telegramStatusLabel } from "@/lib/telegram";
 import type { CmoContentItem } from "@/lib/types";
 
 type Phase = "idle" | "loading" | "live" | "offline";
@@ -339,7 +340,7 @@ LinkedIn: ${item.linkedin_post}`;
 }
 
 export default function CmoDashboard() {
-  const { cmo } = useSiteContent();
+  const { cmo, assistant } = useSiteContent();
   const apiEnabled = cmo.apiEnabled !== false;
   const autoRefresh = cmo.enableAutoRefresh !== false;
 
@@ -410,7 +411,7 @@ export default function CmoDashboard() {
     cmo: cmo.status === "active" ? "Active" : cmo.status === "paused" ? "Standby" : "Offline",
     n8n: apiState,
     api: apiState,
-    telegram: "Coming Soon",
+    telegram: telegramStatusLabel(assistant),
     publishing: "Ready",
   };
 

@@ -5,11 +5,11 @@ import { Bot, Send } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, stagger } from "@/components/motion";
 import { useSiteContent } from "@/lib/useSiteContent";
+import { isTelegramActive } from "@/lib/telegram";
 
 export default function Assistant() {
   const { assistant } = useSiteContent();
-  const botReady =
-    assistant.telegramUrl.trim().length > 0 && assistant.status === "active";
+  const botReady = isTelegramActive(assistant);
 
   return (
     <section id="assistant" className="relative">
